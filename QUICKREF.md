@@ -54,9 +54,9 @@ for doc in results:
 ```
 
 ## Folder Locations
-- **Documents:** `~/Documents/local Vault/Knowledge-Base/`
-- **Index:** `~/Documents/local Vault/.vault/index.json`
-- **System:** `~/Documents/local Vault/System/`
+- **Documents:** `~/Documents/Duck-Pond/Knowledge-Base/`
+- **Index:** `~/Documents/Duck-Pond/.vault/index.json`
+- **System:** `~/Documents/Duck-Pond/System/`
 
 ## Remember
 ✅ All data stays on Mac Mini  

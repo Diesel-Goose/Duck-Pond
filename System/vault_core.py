@@ -27,7 +27,7 @@ from typing import List, Dict, Optional, Any
 import re
 
 # Vault Configuration
-VAULT_ROOT = Path.home() / "Documents" / "local Vault"
+VAULT_ROOT = Path.home() / "Documents" / "HonkNode" / "Duck-Pond"
 INDEX_FILE = VAULT_ROOT / ".vault" / "index.json"
 CONFIG_FILE = VAULT_ROOT / ".vault" / "config.json"
 OLLAMA_API = "http://localhost:11434/api"

@@ -1,14 +1,16 @@
-# 🦆 Local Vault – Diesel-Goose Secure Document System
+# 🦆 Duck Pond – Diesel-Goose Secure Document System
 
 **Local-first, Ollama-powered document storage and retrieval.**
 
 All data stays on your Mac Mini M4. No cloud. No API costs. Fully sovereign.
 
+Born: February 21, 2026 at 4:20 PM MST in Cheyenne, Wyoming
+
 ---
 
-## What is Local Vault?
+## What is Duck Pond?
 
-Local Vault is a secure document management system designed for the Chairman. It combines:
+Duck Pond is a secure document management system designed for the Chairman. It combines:
 
 - **Semantic search** – Find documents by meaning, not just keywords
 - **Ollama integration** – Local AI for embeddings and Q&A
@@ -28,7 +30,7 @@ Local Vault is a secure document management system designed for the Chairman. It
 ### 1. Store a Document
 
 ```bash
-cd ~/Documents/local\ Vault/System
+cd ~/Documents/HonkNode/Duck-Pond/System
 python vault_cli.py store "Q1 Strategy Meeting"
 ```
 
@@ -60,7 +62,7 @@ python vault_cli.py list Business
 ## Folder Structure
 
 ```
-local Vault/
+Duck-Pond/
 ├── System/                    # Vault system files (DO NOT MODIFY)
 │   ├── vault_core.py         # Core storage engine
 │   ├── vault_search.py       # Ollama semantic search
