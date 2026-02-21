@@ -79,6 +79,11 @@ dp() {
             shift
             _dp_mercury "$@"
             ;;
+        brave|search|bs)
+            # Brave Search - web search
+            shift
+            _dp_brave "$@"
+            ;;
         tokens|t)
             # Token optimization info
             _dp_tokens_info
