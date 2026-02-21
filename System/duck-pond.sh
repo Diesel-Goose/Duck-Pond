@@ -74,6 +74,11 @@ dp() {
             shift
             _dp_flare "$@"
             ;;
+        mercury|m)
+            # Mercury Bank operations
+            shift
+            _dp_mercury "$@"
+            ;;
         tokens|t)
             # Token optimization info
             _dp_tokens_info
@@ -444,6 +449,89 @@ EOF
     esac
 }
 
+# Mercury Bank operations
+dp-mercury() { _dp_mercury "$@"; }
+_dp_mercury() {
+    case "$1" in
+        ping|p)
+            echo "🏦 Testing Mercury Bank connection..."
+            python3 "$DUCK_SYSTEM/mercury_client.py" ping
+            ;;
+        accounts|a)
+            echo "💳 Listing Mercury accounts..."
+            python3 "$DUCK_SYSTEM/mercury_client.py" accounts
+            ;;
+        balance|bal)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp mercury balance <account_id>"
+                return 1
+            fi
+            echo "💰 Getting account balance..."
+            python3 "$DUCK_SYSTEM/mercury_client.py" balance "$2"
+            ;;
+        transactions|tx)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp mercury transactions <account_id> [limit]"
+                return 1
+            fi
+            local limit="${3:-100}"
+            echo "📊 Getting transactions (limit: $limit)..."
+            python3 "$DUCK_SYSTEM/mercury_client.py" transactions "$2" "$limit"
+            ;;
+        report|r)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp mercury report <account_id> [days]"
+                return 1
+            fi
+            local days="${3:-30}"
+            echo "📈 Generating $days day report..."
+            python3 "$DUCK_SYSTEM/mercury_client.py" report "$2" "$days"
+            ;;
+        help|h|--help|-h|*)
+            cat << 'EOF'
+🏦 Mercury Bank Commands
+
+USAGE: dp mercury <command> [args]
+
+COMMANDS:
+  ping, p                   Test API connection
+  accounts, a               List all accounts
+  balance, bal <account>    Get account balance
+  transactions, tx <acc>    Get transactions
+  report, r <account>       Generate financial report
+  help                      Show this help
+
+EXAMPLES:
+  dp mercury ping
+  dp mercury accounts
+  dp mercury balance acc_123abc
+  dp mercury transactions acc_123abc 50
+  dp mercury report acc_123abc 30
+
+SETUP:
+1. Get API key: https://app.mercury.com/settings/api
+2. Store: dp creds add mercury api_key YOUR_KEY
+3. Test: dp mercury ping
+
+FEATURES:
+- Real-time balance checking
+- Transaction history export
+- Automated categorization
+- Financial reporting
+- Webhook support (coming soon)
+
+SECURITY:
+- API key stored in encrypted credentials
+- Read-only by default
+- No sensitive data logged
+- Access restricted to L4+ (C-Suite)
+
+For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Business/Mercury-Bank-Integration.md
+EOF
+            ;;
+    esac
+}
+
 # Help
 dp-help() { _dp_help; }
 _dp_help() {
@@ -467,6 +555,7 @@ COMMANDS:
   cost <cmd>                Cost tracker (status/check/log)
   xaman <cmd>               Xaman XRPL wallet (ping/rates/pay)
   flare <cmd>               Flare Network (ping/balance/fts)
+  mercury <cmd>             Mercury Bank (accounts/transactions)
   tokens                    Token optimization guide
   stats                     Show statistics
   open, o                   Open in Finder
