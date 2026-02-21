@@ -64,6 +64,11 @@ dp() {
             shift
             python3 "$DUCK_SYSTEM/cost_tracker.py" "$@"
             ;;
+        xaman|x)
+            # Xaman (XUMM) XRPL wallet operations
+            shift
+            _dp_xaman "$@"
+            ;;
         tokens|t)
             # Token optimization info
             _dp_tokens_info
@@ -254,6 +259,110 @@ For full guide: open ~/Documents/HonkNode/Duck-Pond/TOKEN_OPTIMIZATION.md
 EOF
 }
 
+# Xaman (XUMM) wallet operations
+dp-xaman() { _dp_xaman "$@"; }
+_dp_xaman() {
+    case "$1" in
+        ping|p)
+            echo "🔗 Testing Xaman API connection..."
+            python3 "$DUCK_SYSTEM/xaman_client.py" ping
+            ;;
+        rates|r)
+            local currency="${2:-XRP}"
+            echo "💰 Getting $currency rates..."
+            python3 "$DUCK_SYSTEM/xaman_client.py" rates "$currency"
+            ;;
+        assets|a)
+            echo "📊 Listing curated assets..."
+            python3 "$DUCK_SYSTEM/xaman_client.py" assets
+            ;;
+        status|s)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp xaman status <payload_uuid>"
+                return 1
+            fi
+            echo "📋 Checking payload status..."
+            python3 "$DUCK_SYSTEM/xaman_client.py" status "$2"
+            ;;
+        pay|payment)
+            echo "💸 Creating payment request..."
+            _dp_xaman_payment "$2" "$3" "$4"
+            ;;
+        help|h|--help|-h|*)
+            cat << 'EOF'
+🔗 Xaman (XUMM) Wallet Commands
+
+USAGE: dp xaman <command> [args]
+
+COMMANDS:
+  ping, p                   Test API connection
+  rates, r [XRP]            Get exchange rates
+  assets, a                 List curated assets
+  status, s <uuid>          Check payload status
+  pay <dest> <amt> [cur]    Create payment request
+  help                      Show this help
+
+EXAMPLES:
+  dp xaman ping
+  dp xaman rates USD
+  dp xaman assets
+  dp xaman status abc-123-uuid
+  dp xaman pay rN7n... 100 XRP
+
+NOTES:
+  - Requires Xaman mobile app for signing
+  - API credentials stored in .credentials/
+  - All transactions require manual approval
+  - Test on XRPL Testnet first
+
+For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Technical/XRPL-XRP-Reference.md
+EOF
+            ;;
+    esac
+}
+
+# Create payment request helper
+_dp_xaman_payment() {
+    local destination="$1"
+    local amount="$2"
+    local currency="${3:-XRP}"
+    
+    if [ -z "$destination" ] || [ -z "$amount" ]; then
+        echo "❌ Usage: dp xaman pay <destination> <amount> [currency]"
+        echo "   Example: dp xaman pay rN7n7ot... 100 XRP"
+        return 1
+    fi
+    
+    echo "🦆 Creating payment request..."
+    echo "   To: $destination"
+    echo "   Amount: $amount $currency"
+    echo ""
+    
+    python3 << PYEOF
+import sys
+sys.path.insert(0, '$DUCK_SYSTEM')
+from xaman_client import XamanClient, payment_template
+import json
+
+client = XamanClient()
+tx = payment_template("$destination", "$amount", "$currency")
+result = client.create_sign_request(tx)
+
+if 'error' in result:
+    print(f"❌ Error: {result['error']}")
+else:
+    print("✅ Payment request created!")
+    print(f"   UUID: {result.get('uuid', 'N/A')}")
+    print(f"   QR URL: {result.get('refs', {}).get('qr_png', 'N/A')}")
+    print(f"   Status: {result.get('pushed', False) and 'Pushed to app' or 'Check app manually'}")
+    print("")
+    print("Next steps:")
+    print("1. Scan QR code with Xaman app")
+    print("2. Approve transaction on mobile")
+    print(f"3. Check status: dp xaman status {result.get('uuid', 'uuid-here')}")
+PYEOF
+}
+
 # Help
 dp-help() { _dp_help; }
 _dp_help() {
@@ -275,6 +384,7 @@ COMMANDS:
   tags                      List all tags
   creds <cmd>               Credential manager
   cost <cmd>                Cost tracker (status/check/log)
+  xaman <cmd>               Xaman XRPL wallet (ping/rates/pay)
   tokens                    Token optimization guide
   stats                     Show statistics
   open, o                   Open in Finder
