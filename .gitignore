@@ -8,10 +8,12 @@ Projects/Completed/*
 Archive/
 .vault/*.json
 
-# System credentials
+# System credentials (NEVER COMMIT)
 *.key
 *.password
 *.secret
+.credentials/
+*.credentials.json
 
 # OS files
 .DS_Store
