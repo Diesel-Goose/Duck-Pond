@@ -266,8 +266,15 @@ def send_reply(subject, body, reply_to_id=None):
             msg['In-Reply-To'] = reply_to_id
             msg['References'] = reply_to_id
         
-        # Add signature
-        full_body = body + "\n\n---\n🦆 Diesel-Goose AI\nExecutive Assistant | Greenhead Labs\nSent from HonkNode (Mac Mini M4)"
+        # Add signature (Chairman format)
+        signature = """
+
+Diesel Goose
+Chairman | Greenhead Labs LLC
+www.Greenhead.io | dieselgoose.ai@gmail.com | Wyoming, USA
+HonkNode Operations Center"""
+        
+        full_body = body + signature
         
         msg.attach(MIMEText(full_body, 'plain'))
         
