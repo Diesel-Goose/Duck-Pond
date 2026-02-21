@@ -54,10 +54,19 @@ dp() {
             # List all tags
             _dp_tags
             ;;
-        creds|creds|c)
+        creds|c)
             # Credential management
             shift
             python3 "$DUCK_SYSTEM/dp-creds.py" "$@"
+            ;;
+        cost)
+            # Cost tracking
+            shift
+            python3 "$DUCK_SYSTEM/cost_tracker.py" "$@"
+            ;;
+        tokens|t)
+            # Token optimization info
+            _dp_tokens_info
             ;;
         open|o)
             # Open Duck Pond in Finder
@@ -217,6 +226,34 @@ for tag in sorted(tags):
 " 2>/dev/null
 }
 
+# Token optimization info
+dp-tokens() { _dp_tokens_info; }
+_dp_tokens_info() {
+    cat << 'EOF'
+💾 Token Optimization Guide
+
+CONTEXT LIMIT: 123K tokens
+
+QUICK TIPS:
+  1. Use Ollama (local) for routine tasks - FREE, no token limit
+  2. Store large docs in Duck Pond, reference by path
+  3. /new or /reset when context gets full
+  4. Summarize before sending to API
+
+COMMANDS:
+  dp cost status            Check API spending
+  dp tokens                 Show this guide
+  /new or /reset            Clear context (start fresh)
+
+COST SAVINGS:
+  • Ollama (local): $0.00 per call
+  • Cloud API: $0.002-0.06 per 1K tokens
+  • Target: $0-2/day (down from $20/day)
+
+For full guide: open ~/Documents/HonkNode/Duck-Pond/TOKEN_OPTIMIZATION.md
+EOF
+}
+
 # Help
 dp-help() { _dp_help; }
 _dp_help() {
@@ -236,7 +273,9 @@ COMMANDS:
   recent, r                 Show recent documents
   edit, e <search>          Edit document
   tags                      List all tags
-  creds <cmd>               Credential manager (add/get/list/show)
+  creds <cmd>               Credential manager
+  cost <cmd>                Cost tracker (status/check/log)
+  tokens                    Token optimization guide
   stats                     Show statistics
   open, o                   Open in Finder
   help                      Show this help
