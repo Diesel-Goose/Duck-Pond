@@ -69,6 +69,11 @@ dp() {
             shift
             _dp_xaman "$@"
             ;;
+        flare|f)
+            # Flare Network operations
+            shift
+            _dp_flare "$@"
+            ;;
         tokens|t)
             # Token optimization info
             _dp_tokens_info
@@ -363,6 +368,82 @@ else:
 PYEOF
 }
 
+# Flare Network operations
+dp-flare() { _dp_flare "$@"; }
+_dp_flare() {
+    case "$1" in
+        ping|p)
+            echo "🔗 Testing Flare Network connection..."
+            python3 "$DUCK_SYSTEM/flare_client.py" ping
+            ;;
+        block|b)
+            echo "⛓️  Getting latest block..."
+            python3 "$DUCK_SYSTEM/flare_client.py" block
+            ;;
+        balance|bal)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp flare balance <address>"
+                return 1
+            fi
+            echo "💰 Checking FLR balance..."
+            python3 "$DUCK_SYSTEM/flare_client.py" balance "$2"
+            ;;
+        gas|g)
+            echo "⛽ Getting gas price..."
+            python3 "$DUCK_SYSTEM/flare_client.py" gas
+            ;;
+        chain|c)
+            echo "🔗 Getting chain info..."
+            python3 "$DUCK_SYSTEM/flare_client.py" chain
+            ;;
+        fts|price)
+            if [ -z "$2" ]; then
+                echo "❌ Usage: dp flare fts <SYMBOL>"
+                echo "   Example: dp flare fts XRP"
+                return 1
+            fi
+            echo "📊 Getting FTSO price for $2..."
+            python3 "$DUCK_SYSTEM/flare_client.py" fts price "$2"
+            ;;
+        help|h|--help|-h|*)
+            cat << 'EOF'
+🔥 Flare Network Commands
+
+USAGE: dp flare <command> [args]
+
+COMMANDS:
+  ping, p                   Test connection to Flare
+  block, b                  Get latest block number
+  balance, bal <address>    Get FLR balance
+  gas, g                    Get current gas price
+  chain, c                  Get chain ID info
+  fts, price <SYMBOL>       Get FTSO oracle price
+  help                      Show this help
+
+EXAMPLES:
+  dp flare ping
+  dp flare block
+  dp flare balance 0x1234...
+  dp flare gas
+  dp flare fts XRP
+  dp flare fts BTC
+
+NETWORKS:
+  - Mainnet (chain_id: 14) - Default
+  - Coston2 (chain_id: 114) - Testnet
+
+FEATURES:
+  - EVM compatible (MetaMask works)
+  - FTSO price feeds (XRP, BTC, ETH, etc.)
+  - F-Assets (FXRP, etc.) - coming soon
+  - State Connector - cross-chain verification
+
+For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Technical/Flare-Network-Reference.md
+EOF
+            ;;
+    esac
+}
+
 # Help
 dp-help() { _dp_help; }
 _dp_help() {
@@ -385,6 +466,7 @@ COMMANDS:
   creds <cmd>               Credential manager
   cost <cmd>                Cost tracker (status/check/log)
   xaman <cmd>               Xaman XRPL wallet (ping/rates/pay)
+  flare <cmd>               Flare Network (ping/balance/fts)
   tokens                    Token optimization guide
   stats                     Show statistics
   open, o                   Open in Finder
