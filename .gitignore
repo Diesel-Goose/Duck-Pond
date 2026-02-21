@@ -1,0 +1,33 @@
+# Duck Pond - Private Data Protection
+# Never commit personal documents to GitHub
+
+# Private knowledge (NEVER COMMIT)
+Knowledge-Base/
+Projects/Active/*
+Projects/Completed/*
+Archive/
+.vault/*.json
+
+# System credentials
+*.key
+*.password
+*.secret
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log
