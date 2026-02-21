@@ -18,20 +18,35 @@ IMAP_SERVER = "imap.gmail.com"
 EMAIL_ACCOUNT = "dieselgoose.ai@gmail.com"
 SENDER_FILTER = "nathan@greenhead.io"
 
-# Use credentials from secure storage
-CREDENTIALS_FILE = Path.home() / ".openclaw" / "credentials" / "gmail-app-password.json"
+# Use credentials from Duck-Pond secure storage (primary) or OpenClaw (fallback)
+DUCK_POND_CREDS = Path.home() / "Documents" / "HonkNode" / "Duck-Pond" / ".credentials" / "credentials.json"
+OPENCLAW_CREDS = Path.home() / ".openclaw" / "credentials" / "gmail-app-password.json"
 STATE_FILE = Path.home() / "Documents" / "HonkNode" / "Duck-Pond" / ".vault" / "email_state.json"
 
 def load_credentials():
-    """Load email credentials from secure storage"""
-    if CREDENTIALS_FILE.exists():
+    """Load email credentials from secure storage (Duck-Pond primary, OpenClaw fallback)"""
+    # Try Duck-Pond first
+    if DUCK_POND_CREDS.exists():
         try:
-            with open(CREDENTIALS_FILE, 'r') as f:
+            with open(DUCK_POND_CREDS, 'r') as f:
+                data = json.load(f)
+                gmail = data.get("credentials", {}).get("gmail", {})
+                password = gmail.get("app_password", "")
+                if password:
+                    return password.replace(" ", "")
+        except:
+            pass
+    
+    # Fallback to OpenClaw
+    if OPENCLAW_CREDS.exists():
+        try:
+            with open(OPENCLAW_CREDS, 'r') as f:
                 creds = json.load(f)
                 return creds.get("app_password", "").replace(" ", "")
         except:
             pass
-    # Fallback to env var
+    
+    # Final fallback to env var
     return os.environ.get("DG_EMAIL_PASSWORD", "")
 
 def load_state():

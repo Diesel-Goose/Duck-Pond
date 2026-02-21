@@ -54,6 +54,11 @@ dp() {
             # List all tags
             _dp_tags
             ;;
+        creds|creds|c)
+            # Credential management
+            shift
+            python3 "$DUCK_SYSTEM/dp-creds.py" "$@"
+            ;;
         open|o)
             # Open Duck Pond in Finder
             open "$DUCK_POND_ROOT"
@@ -222,7 +227,7 @@ USAGE: dp <command> [arguments]
 
 COMMANDS:
   store, s <title>          Store new document
-  search, f <query>         Search documents  
+  search, f <query>         Search documents
   ask, a <question>         Ask AI about your docs
   list, l [category]        List documents
   show, c <id>              Show document content
@@ -231,6 +236,7 @@ COMMANDS:
   recent, r                 Show recent documents
   edit, e <search>          Edit document
   tags                      List all tags
+  creds <cmd>               Credential manager (add/get/list/show)
   stats                     Show statistics
   open, o                   Open in Finder
   help                      Show this help
@@ -249,6 +255,13 @@ EXAMPLES:
   dp today
   dp edit "business plan"
   dp tags
+  dp creds add gmail app_password <secret>
+  dp creds show gmail
+  dp creds list
+
+SECURITY:
+  Credentials stored in: ~/Documents/HonkNode/Duck-Pond/.credentials/
+  Permissions: 700 (owner only), never synced to cloud/GitHub
 
 All data stays local. No cloud. Quack protocol active.
 EOF

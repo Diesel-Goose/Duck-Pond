@@ -19,6 +19,12 @@ chmod +x "$SYSTEM/duck-pond.sh"
 
 echo "✅ Scripts made executable"
 
+# Create secure credentials directory
+CREDS_DIR="$DUCK_POND/.credentials"
+mkdir -p "$CREDS_DIR"
+chmod 700 "$CREDS_DIR"
+echo "✅ Created secure credentials directory (.credentials/)"
+
 # Add to .zshrc if not already present
 if ! grep -q "duck-pond.sh" "$HOME/.zshrc" 2>/dev/null; then
     echo "" >> "$HOME/.zshrc"
@@ -55,7 +61,14 @@ cat > "$BIN_DIR/dp-template" << EOF
 cd "$SYSTEM" && python3 dp-template.py "\$@"
 EOF
 
+cat > "$BIN_DIR/dp-creds" << EOF
+#!/bin/zsh
+cd "$SYSTEM" && python3 dp-creds.py "\$@"
+EOF
+
 chmod +x "$BIN_DIR/"dp*
+
+echo "✅ Created global commands: dp, dp-quick, dp-fzf, dp-template, dp-creds"
 
 echo "✅ Created global commands: dp, dp-quick, dp-fzf, dp-template"
 
