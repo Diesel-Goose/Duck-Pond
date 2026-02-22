@@ -23,14 +23,19 @@ IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 EMAIL_ACCOUNT = "dieselgoose.ai@gmail.com"
-SENDER_FILTER = "nathan@greenhead.io"
 CHAIRMAN_EMAIL = "nathan@greenhead.io"
 
+# Approved senders who can interact with the system
+APPROVED_SENDERS = [
+    "nathan@greenhead.io",
+    "Curtis.rapue@gmail.com"
+]
+
 # Use credentials from Duck-Pond secure storage (primary) or OpenClaw (fallback)
-DUCK_POND_CREDS = Path.home() / "Documents" / "HonkNode" / "Duck-Pond" / ".credentials" / "credentials.json"
+DUCK_POND_CREDS = Path.home() / "Honk-Node" / "Duck-Pond" / ".credentials" / "credentials.json"
 OPENCLAW_CREDS = Path.home() / ".openclaw" / "credentials" / "gmail-app-password.json"
-STATE_FILE = Path.home() / "Documents" / "HonkNode" / "Duck-Pond" / ".vault" / "email_state.json"
-EMAIL_LOG = Path.home() / "Documents" / "HonkNode" / "Duck-Pond" / ".vault" / "email_log.json"
+STATE_FILE = Path.home() / "Honk-Node" / "Duck-Pond" / ".vault" / "email_state.json"
+EMAIL_LOG = Path.home() / "Honk-Node" / "Duck-Pond" / ".vault" / "email_log.json"
 
 def load_credentials():
     """Load email credentials from secure storage (Duck-Pond primary, OpenClaw fallback)"""
@@ -122,7 +127,7 @@ def get_email_body(msg):
 
 def check_emails():
     """Check for new emails from specified sender"""
-    print(f"🦆 Checking {EMAIL_ACCOUNT} for emails from {SENDER_FILTER}...")
+    print(f"🦆 Checking {EMAIL_ACCOUNT} for emails from approved senders...")
     
     EMAIL_PASSWORD = load_credentials()
     
@@ -136,8 +141,18 @@ def check_emails():
         mail.login(EMAIL_ACCOUNT, EMAIL_PASSWORD)
         mail.select('inbox')
         
-        # Search for emails from sender
-        status, messages = mail.search(None, f'FROM "{SENDER_FILTER}"')
+        # Search for emails from approved senders
+        # Build OR query for multiple senders
+        if len(APPROVED_SENDERS) == 1:
+            search_query = f'FROM "{APPROVED_SENDERS[0]}"'
+        else:
+            # Build nested OR: OR OR FROM "a" FROM "b" FROM "c"
+            search_query = "OR " * (len(APPROVED_SENDERS) - 1)
+            for sender in APPROVED_SENDERS:
+                search_query += f'FROM "{sender}" '
+            search_query = search_query.strip()
+        
+        status, messages = mail.search(None, search_query)
         
         if status != 'OK' or not messages[0]:
             print("📭 No new emails")
@@ -182,11 +197,11 @@ def check_emails():
         save_state(state)
         
         if new_emails:
-            print(f"📬 Found {len(new_emails)} new email(s) from Chairman:")
+            print(f"📬 Found {len(new_emails)} new email(s) from approved senders:")
             for e in new_emails:
-                print(f"   📧 {e['subject']}")
+                print(f"   📧 {e['subject']} (from: {e['from']})")
         else:
-            print("📭 No new emails from Chairman")
+            print("📭 No new emails from approved senders")
         
         return new_emails
         
@@ -207,8 +222,16 @@ def read_latest_email():
         mail.login(EMAIL_ACCOUNT, EMAIL_PASSWORD)
         mail.select('inbox')
         
-        # Search for emails from sender
-        status, messages = mail.search(None, f'FROM "{SENDER_FILTER}"')
+        # Search for emails from approved senders
+        if len(APPROVED_SENDERS) == 1:
+            search_query = f'FROM "{APPROVED_SENDERS[0]}"'
+        else:
+            search_query = "OR " * (len(APPROVED_SENDERS) - 1)
+            for sender in APPROVED_SENDERS:
+                search_query += f'FROM "{sender}" '
+            search_query = search_query.strip()
+        
+        status, messages = mail.search(None, search_query)
         
         if status != 'OK' or not messages[0]:
             print("📭 No emails found")

@@ -168,10 +168,10 @@ class ContextMonitor:
 dp mercury ping && dp xaman ping && dp flare ping
 
 # View backup
-open ~/Documents/HonkNode/Duck-Pond/System/context_backups/{backup_file.name}
+open ~/Honk-Node/Duck-Pond/System/context_backups/{backup_file.name}
 
 # Continue work
-cd ~/Documents/HonkNode/Duck-Pond
+cd ~/Honk-Node/Duck-Pond
 ```
 
 ### Contact:
@@ -250,7 +250,7 @@ def main():
         print("🦆 Saving critical state...")
         backup = monitor.save_critical_state()
         print(f"✅ Saved: {backup}")
-        print(f"✅ Resume file created: ~/Documents/HonkNode/Duck-Pond/RESUME_AFTER_COMPACTION.md")
+        print(f"✅ Resume file created: ~/Honk-Node/Duck-Pond/RESUME_AFTER_COMPACTION.md")
         print("\nReady for: /compact")
     
     elif args.check:

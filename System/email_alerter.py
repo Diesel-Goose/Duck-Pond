@@ -4,7 +4,7 @@ Email Alert System for Chairman
 Proactively checks for new emails and sends Telegram alerts
 
 Run via cron every 5 minutes:
-*/5 * * * * cd ~/Documents/HonkNode/Duck-Pond && python3 System/email_alerter.py
+*/5 * * * * cd ~/Honk-Node/Duck-Pond && python3 System/email_alerter.py
 """
 
 import subprocess

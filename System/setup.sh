@@ -4,7 +4,7 @@
 
 echo "🦆 Setting up Duck Pond..."
 
-DUCK_POND="$HOME/Documents/HonkNode/Duck-Pond"
+DUCK_POND="$HOME/Honk-Node/Duck-Pond"
 SYSTEM="$DUCK_POND/System"
 
 # Check if Duck Pond exists

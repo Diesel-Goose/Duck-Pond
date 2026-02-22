@@ -1,9 +1,9 @@
 #!/bin/zsh
 # Duck Pond Quick Access - Add to ~/.zshrc
-# Source this file: echo 'source ~/Documents/HonkNode/Duck-Pond/System/duck-pond.sh' >> ~/.zshrc
+# Source this file: echo 'source ~/Honk-Node/Duck-Pond/System/duck-pond.sh' >> ~/.zshrc
 
 # Configuration
-DUCK_POND_ROOT="$HOME/Documents/HonkNode/Duck-Pond"
+DUCK_POND_ROOT="$HOME/Honk-Node/Duck-Pond"
 DUCK_SYSTEM="$DUCK_POND_ROOT/System"
 
 # Main shortcut function
@@ -270,7 +270,7 @@ COST SAVINGS:
   • Cloud API: $0.002-0.06 per 1K tokens
   • Target: $0-2/day (down from $20/day)
 
-For full guide: open ~/Documents/HonkNode/Duck-Pond/TOKEN_OPTIMIZATION.md
+For full guide: open ~/Honk-Node/Duck-Pond/TOKEN_OPTIMIZATION.md
 EOF
 }
 
@@ -330,7 +330,7 @@ NOTES:
   - All transactions require manual approval
   - Test on XRPL Testnet first
 
-For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Technical/XRPL-XRP-Reference.md
+For detailed docs: open ~/Honk-Node/Duck-Pond/Knowledge-Base/Technical/XRPL-XRP-Reference.md
 EOF
             ;;
     esac
@@ -448,7 +448,7 @@ FEATURES:
   - F-Assets (FXRP, etc.) - coming soon
   - State Connector - cross-chain verification
 
-For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Technical/Flare-Network-Reference.md
+For detailed docs: open ~/Honk-Node/Duck-Pond/Knowledge-Base/Technical/Flare-Network-Reference.md
 EOF
             ;;
     esac
@@ -531,7 +531,7 @@ SECURITY:
 - No sensitive data logged
 - Access restricted to L4+ (C-Suite)
 
-For detailed docs: open ~/Documents/HonkNode/Duck-Pond/Knowledge-Base/Business/Mercury-Bank-Integration.md
+For detailed docs: open ~/Honk-Node/Duck-Pond/Knowledge-Base/Business/Mercury-Bank-Integration.md
 EOF
             ;;
     esac
@@ -585,7 +585,7 @@ EXAMPLES:
   dp creds list
 
 SECURITY:
-  Credentials stored in: ~/Documents/HonkNode/Duck-Pond/.credentials/
+  Credentials stored in: ~/Honk-Node/Duck-Pond/.credentials/
   Permissions: 700 (owner only), never synced to cloud/GitHub
 
 All data stays local. No cloud. Quack protocol active.

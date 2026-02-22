@@ -240,7 +240,7 @@ def send_telegram_notification(date_str, doc_id=None):
 
 Your daily recap has been generated and saved.
 
-Location: ~/Documents/HonkNode/Duck-Pond/Journal/
+Location: ~/Honk-Node/Duck-Pond/Journal/
 Vault ID: {doc_id if doc_id else 'N/A'}
 
 Today's priorities await your review, Chairman.
