@@ -43,7 +43,12 @@ def get_system_status():
                                 mission = parts[2].split('💡')[1].strip().replace('%', '')
                                 status = parts[3].strip()
                         if '🎯 Active:' in line:
-                            active = line.split('🎯 Active:')[1].strip()
+                            active_full = line.split('🎯 Active:')[1].strip()
+                            # Strip the " — Telegram auto-heartbeat" suffix to prevent duplication
+                            if ' — Telegram auto-heartbeat' in active_full:
+                                active = active_full.split(' — Telegram auto-heartbeat')[0].strip()
+                            else:
+                                active = active_full
                             break
         
         return {
